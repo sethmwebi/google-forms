@@ -1,17 +1,48 @@
-import { Link, useRouter } from "expo-router";
-import { Text, View } from "react-native";
-import { Button } from "react-native-paper";
+import { useRouter } from "expo-router";
+import { useState } from "react";
+import { View, ScrollView } from "react-native";
+import { Button, Card, TextInput, useTheme, RadioButton } from "react-native-paper";
 
-export default function DeliveryDetails(){
+export default function DeliveryDetails() {
+	const [shipping, setShipping] = useState('free')
 	const router = useRouter();
+	const theme = useTheme();
 
 	const nextPage = () => {
-		router.push("/checkout/payment")
-	}
+		router.push("/checkout/payment");
+	};
 	return (
-		<View>
-			<Text>Delivery Details</Text>
-			<Button onPress={nextPage} mode="contained">Next</Button>
-		</View>
-	)
+		<ScrollView contentContainerStyle={{ gap: 15, maxWidth: 500, width: '100%', alignSelf: 'center' }} showsVerticalScrollIndicator={false}>
+			<Card style={{ backgroundColor: theme.colors.background }}>
+				<Card.Title title="Delivery Address" titleVariant="titleLarge" />
+				<Card.Content style={{ gap: 10 }}>
+					<TextInput
+						label="City"
+						style={{ backgroundColor: theme.colors.background }}
+					/>
+					<TextInput
+						label="Postal code"
+						style={{ backgroundColor: theme.colors.background }}
+					/>
+					<TextInput
+						label="Address"
+						style={{ backgroundColor: theme.colors.background }}
+					/>
+				</Card.Content>
+			</Card>
+			<Card style={{ backgroundColor: theme.colors.background }}>
+				<Card.Title title="Shipping Options" titleVariant="titleLarge" />
+				<Card.Content style={{ gap: 10 }}>
+					<RadioButton.Group value={shipping} onValueChange={setShipping}>
+						<RadioButton.Item label="Free" value="free"/>
+						<RadioButton.Item label="Fast" value="fast"/>
+						<RadioButton.Item label="Same Day" value="same_day"/>
+					</RadioButton.Group>
+				</Card.Content>
+			</Card>
+			<Button onPress={nextPage} mode="contained">
+				Next
+			</Button>
+		</ScrollView>
+	);
 }
