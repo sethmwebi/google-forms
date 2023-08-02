@@ -1,10 +1,29 @@
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { View, ScrollView } from "react-native";
-import { Button, Card, TextInput, useTheme, RadioButton } from "react-native-paper";
+import {
+	Button,
+	Card,
+	TextInput,
+	useTheme,
+	RadioButton,
+    HelperText,
+} from "react-native-paper";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+	DeliveryInfo,
+	DeliveryInfoSchema,
+} from "../../src/schema/checkout.schema";
+import ControlledInput from "../../src/components/ControlledInput";
 
 export default function DeliveryDetails() {
-	const [shipping, setShipping] = useState('free')
+	const { control, handleSubmit } = useForm<DeliveryInfo>({
+		resolver: zodResolver(DeliveryInfoSchema),
+		defaultValues: {
+			shipping: "fast"
+		}
+	});
 	const router = useRouter();
 	const theme = useTheme();
 
@@ -12,19 +31,33 @@ export default function DeliveryDetails() {
 		router.push("/checkout/payment");
 	};
 	return (
-		<ScrollView contentContainerStyle={{ gap: 15, maxWidth: 500, width: '100%', alignSelf: 'center' }} showsVerticalScrollIndicator={false}>
+		<ScrollView
+			contentContainerStyle={{
+				gap: 15,
+				maxWidth: 500,
+				width: "100%",
+				alignSelf: "center",
+			}}
+			showsVerticalScrollIndicator={false}
+		>
 			<Card style={{ backgroundColor: theme.colors.background }}>
 				<Card.Title title="Delivery Address" titleVariant="titleLarge" />
 				<Card.Content style={{ gap: 10 }}>
-					<TextInput
+					<ControlledInput
+						control={control}
+						name="city"
 						label="City"
 						style={{ backgroundColor: theme.colors.background }}
 					/>
-					<TextInput
+					<ControlledInput
+						control={control}
+						name="postalCode"
 						label="Postal code"
 						style={{ backgroundColor: theme.colors.background }}
 					/>
-					<TextInput
+					<ControlledInput
+						control={control}
+						name="address"
 						label="Address"
 						style={{ backgroundColor: theme.colors.background }}
 					/>
@@ -33,14 +66,23 @@ export default function DeliveryDetails() {
 			<Card style={{ backgroundColor: theme.colors.background }}>
 				<Card.Title title="Shipping Options" titleVariant="titleLarge" />
 				<Card.Content style={{ gap: 10 }}>
-					<RadioButton.Group value={shipping} onValueChange={setShipping}>
-						<RadioButton.Item label="Free" value="free"/>
-						<RadioButton.Item label="Fast" value="fast"/>
-						<RadioButton.Item label="Same Day" value="same_day"/>
-					</RadioButton.Group>
+					<Controller
+						control={control}
+						name="shipping"
+						render={({ field: { value, onChange }, fieldState: { invalid, error }}) => (
+							<View>
+							<HelperText type="error" visible={invalid}>{error?.message}</HelperText>
+							<RadioButton.Group value={value} onValueChange={(value) => onChange(value)}>
+								<RadioButton.Item label="Free" value="free" />
+								<RadioButton.Item label="Fast" value="fast" />
+								<RadioButton.Item label="Same Day" value="same_day" />
+							</RadioButton.Group>
+							</View>
+						)}
+					/>
 				</Card.Content>
 			</Card>
-			<Button onPress={nextPage} mode="contained">
+			<Button onPress={handleSubmit(nextPage)} mode="contained">
 				Next
 			</Button>
 		</ScrollView>
