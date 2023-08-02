@@ -18,7 +18,7 @@ const ControlledInput = ({ control, name, ...textInputProps }: ControlledInputPr
 				field: { value, onChange, onBlur },
 				fieldState: { error, invalid },
 			}) => (
-				<View>
+				<View style={{flex: 1}}>
 					<TextInput
 						{...textInputProps}
 						style={{ backgroundColor: theme.colors.background }}
