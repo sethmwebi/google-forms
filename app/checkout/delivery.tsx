@@ -1,5 +1,4 @@
 import { useRouter } from "expo-router";
-import { useState } from "react";
 import { View, ScrollView } from "react-native";
 import {
 	Button,
@@ -16,6 +15,7 @@ import {
 	DeliveryInfoSchema,
 } from "../../src/schema/checkout.schema";
 import ControlledInput from "../../src/components/ControlledInput";
+import { useCheckoutContext } from "../../src/context/CheckoutContext";
 
 export default function DeliveryDetails() {
 	const { control, handleSubmit } = useForm<DeliveryInfo>({
@@ -24,10 +24,12 @@ export default function DeliveryDetails() {
 			shipping: "fast"
 		}
 	});
+	const { setDelivery } = useCheckoutContext()
 	const router = useRouter();
 	const theme = useTheme();
 
-	const nextPage = () => {
+	const nextPage = (data: DeliveryInfo) => {
+		setDelivery(data)
 		router.push("/checkout/payment");
 	};
 	return (

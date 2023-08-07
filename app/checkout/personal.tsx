@@ -3,8 +3,6 @@ import { View, ScrollView } from "react-native";
 import {
 	Button,
 	Card,
-	HelperText,
-	TextInput,
 	useTheme,
 } from "react-native-paper";
 import { useForm, Controller } from "react-hook-form";
@@ -14,20 +12,21 @@ import {
 	PersonalInfo,
 } from "../../src/schema/checkout.schema";
 import ControlledInput from "../../src/components/ControlledInput";
+import { useCheckoutContext } from "../../src/context/CheckoutContext";
 
 export default function PersonalDetails() {
 	const {
 		control,
 		handleSubmit,
-		formState: { errors },
 	} = useForm<PersonalInfo>({
 		resolver: zodResolver(PersonalnfoSchema),
 	});
+	const { setPersonal } = useCheckoutContext()
 	const router = useRouter();
 	const theme = useTheme();
 
-	const nextPage = (data) => {
-		console.log("Form fields: ", data);
+	const nextPage = (data: PersonalInfo) => {
+		setPersonal(data)
 		router.push("/checkout/delivery");
 	};
 

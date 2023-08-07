@@ -1,5 +1,5 @@
 import { useRouter } from "expo-router";
-import { ScrollView, View } from "react-native";
+import { Alert, ScrollView, View } from "react-native";
 import {
 	Button,
 	Card,
@@ -16,16 +16,24 @@ import {
 	PaymentInfoSchema,
 } from "../../src/schema/checkout.schema";
 import ControlledInput from "../../src/components/ControlledInput";
+import { useCheckoutContext } from "../../src/context/CheckoutContext";
 
 export default function PaymentDetails() {
 	const { control, handleSubmit } = useForm<PaymentInfo>({
 		resolver: zodResolver(PaymentInfoSchema),
 	});
+	const { setPayment, onSubmitAll } = useCheckoutContext();
 	const router = useRouter();
 	const theme = useTheme();
 
-	const nextPage = () => {
-		router.push("/");
+	const nextPage = async (data: PaymentInfo) => {
+		setPayment(data);
+		const success = await onSubmitAll(data);
+		if (success) {
+			router.push("/");
+		} else {
+			Alert.alert("Failed to submit the form")
+		}
 	};
 
 	return (
@@ -66,7 +74,7 @@ export default function PaymentDetails() {
 					<Controller
 						control={control}
 						name="saveInfo"
-						render={({ field: { value, onChange }}) => (
+						render={({ field: { value, onChange } }) => (
 							<Checkbox.Item
 								label="Save payment information"
 								status={value ? "checked" : "unchecked"}
