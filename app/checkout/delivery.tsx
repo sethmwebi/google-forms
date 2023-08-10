@@ -21,7 +21,10 @@ export default function DeliveryDetails() {
 	const { control, handleSubmit } = useForm<DeliveryInfo>({
 		resolver: zodResolver(DeliveryInfoSchema),
 		defaultValues: {
-			shipping: "fast"
+			shipping: "fast",
+			city: "Nairobi",
+			postalCode: "123 Main Street",
+			address: "123 Main Street"
 		}
 	});
 	const { setDelivery } = useCheckoutContext()

@@ -20,6 +20,10 @@ export default function PersonalDetails() {
 		handleSubmit,
 	} = useForm<PersonalInfo>({
 		resolver: zodResolver(PersonalnfoSchema),
+		defaultValues: {
+			name: "seth",
+			email: "mwebi@gmail.com"
+		}
 	});
 	const { setPersonal } = useCheckoutContext()
 	const router = useRouter();
