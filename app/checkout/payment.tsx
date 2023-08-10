@@ -3,10 +3,7 @@ import { Alert, ScrollView, View } from "react-native";
 import {
 	Button,
 	Card,
-	TextInput,
 	useTheme,
-	Switch,
-	Text,
 	Checkbox,
 } from "react-native-paper";
 import { useForm, Controller } from "react-hook-form";

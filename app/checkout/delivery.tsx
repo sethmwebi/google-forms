@@ -3,10 +3,9 @@ import { View, ScrollView } from "react-native";
 import {
 	Button,
 	Card,
-	TextInput,
 	useTheme,
 	RadioButton,
-    HelperText,
+	HelperText,
 } from "react-native-paper";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -21,15 +20,15 @@ export default function DeliveryDetails() {
 	const { control, handleSubmit } = useForm<DeliveryInfo>({
 		resolver: zodResolver(DeliveryInfoSchema),
 		defaultValues: {
-			shipping: "fast"
-		}
+			shipping: "fast",
+		},
 	});
-	const { setDelivery } = useCheckoutContext()
+	const { setDelivery } = useCheckoutContext();
 	const router = useRouter();
 	const theme = useTheme();
 
 	const nextPage = (data: DeliveryInfo) => {
-		setDelivery(data)
+		setDelivery(data);
 		router.push("/checkout/payment");
 	};
 	return (
@@ -71,14 +70,22 @@ export default function DeliveryDetails() {
 					<Controller
 						control={control}
 						name="shipping"
-						render={({ field: { value, onChange }, fieldState: { invalid, error }}) => (
+						render={({
+							field: { value, onChange },
+							fieldState: { invalid, error },
+						}) => (
 							<View>
-							<HelperText type="error" visible={invalid}>{error?.message}</HelperText>
-							<RadioButton.Group value={value} onValueChange={(value) => onChange(value)}>
-								<RadioButton.Item label="Free" value="free" />
-								<RadioButton.Item label="Fast" value="fast" />
-								<RadioButton.Item label="Same Day" value="same_day" />
-							</RadioButton.Group>
+								<HelperText type="error" visible={invalid}>
+									{error?.message}
+								</HelperText>
+								<RadioButton.Group
+									value={value}
+									onValueChange={(value) => onChange(value)}
+								>
+									<RadioButton.Item label="Free" value="free" />
+									<RadioButton.Item label="Fast" value="fast" />
+									<RadioButton.Item label="Same Day" value="same_day" />
+								</RadioButton.Group>
 							</View>
 						)}
 					/>
