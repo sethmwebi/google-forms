@@ -5,7 +5,9 @@ const cardNumberRegex = '\b\d{4}[- ]?\d{4}[- ]?\d{4}[- ]?\d{4}\b'
 export const PersonalnfoSchema = z.object({
 	name: z.string({ required_error: "Name is required" }).min(1),
 	email: z.string().email({ message: "Please provide a valid email" }),
-});
+	password: z.string(),
+	confirmPassword: z.string()
+}).refine(data => data.password === data.confirmPassword, { message: "Passwords don't match!", path: ["confirmPassword"]});
 
 export type PersonalInfo = z.infer<typeof PersonalnfoSchema>;
 
@@ -41,6 +43,6 @@ export const PaymentInfoSchema = z.object({
 export type PaymentInfo = z.infer<typeof PaymentInfoSchema>;
 
 export const CheckoutInfoSchema =
-	PersonalnfoSchema.merge(DeliveryInfoSchema).merge(PaymentInfoSchema);
+	DeliveryInfoSchema.merge(PersonalnfoSchema).merge(PaymentInfoSchema);
 
 export type CheckoutData = z.infer<typeof CheckoutInfoSchema>;

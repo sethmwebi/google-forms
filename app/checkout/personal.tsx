@@ -59,6 +59,20 @@ export default function PersonalDetails() {
 						placeholder="hey@email.com"
 						label="Email"
 					/>
+					<ControlledInput
+						control={control}
+						name="password"
+						placeholder="password"
+						label="Password"
+						secureTextEntry
+					/>
+					<ControlledInput
+						control={control}
+						name="confirmPassword"
+						placeholder="confirm password"
+						label="Confirm Password"
+						secureTextEntry
+					/>
 				</Card.Content>
 			</Card>
 			<Button onPress={handleSubmit(nextPage)} mode="contained">
